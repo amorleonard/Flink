@@ -7,7 +7,6 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
-import org.apache.flink.streaming.api.environment.LocalStreamEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
@@ -25,7 +24,7 @@ public class Flink03_Stream_UnBounded_WordCount {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
 
         //并行度设置为1
-        env.setParallelism(1);
+        //env.setParallelism(1);
 
         //2、获取无界数据
         DataStreamSource<String> streamSource = env.socketTextStream("hadoop102", 9999);
