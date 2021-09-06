@@ -7,6 +7,7 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
 
 import java.util.Random;
 
+
 /**
  * @ClassName Flink04_Source_Custom
  * @Description //TODO 自定义source
