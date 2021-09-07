@@ -21,6 +21,7 @@ public class Flink03_Stream_UnBounded_WordCount {
     public static void main(String[] args) throws Exception {
         //1、获取流的执行环境
         //StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //可以在虚拟机上开启standalone/Yarn，直接通过localhost:8081访问web界面
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
 
         //并行度设置为1
