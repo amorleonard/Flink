@@ -24,12 +24,12 @@ public class Flink04_Source_Custom {
 
         DataStreamSource<WaterSensor> waterSensorDataStreamSource = env.addSource(new SourceFunction<WaterSensor>() {
             private boolean isRuning = true;
-            private Random random = new Random();
+            private volatile Random random = new Random();
 
             @Override
             public void run(SourceContext<WaterSensor> ctx) throws Exception {
                 while (isRuning) {
-                    ctx.collect(new WaterSensor("sensor_" + this.random.nextInt(100), System.currentTimeMillis(), this.random.nextInt(1000)));
+                    ctx.collect(new WaterSensor("sensor_" + this.random.nextInt(10), System.currentTimeMillis(), this.random.nextInt(10)));
 
                     Thread.sleep(20);
                 }
@@ -39,6 +39,7 @@ public class Flink04_Source_Custom {
             public void cancel() {
                 isRuning = false;
             }
+
         });
 
         waterSensorDataStreamSource.print();

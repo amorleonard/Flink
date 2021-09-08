@@ -1,4 +1,4 @@
-package com.atguigu.day03;
+package com.atguigu.day03.transform;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.functions.RuntimeContext;
