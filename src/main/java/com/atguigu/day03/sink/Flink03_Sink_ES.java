@@ -17,6 +17,7 @@ import org.elasticsearch.client.Requests;
 import org.elasticsearch.common.xcontent.XContentType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Flink03_Sink_ES {
@@ -50,6 +51,18 @@ public class Flink03_Sink_ES {
                 httphosts,
                 new ElasticsearchSinkFunction<WaterSensor>() {
                     public IndexRequest createIndexRequest(WaterSensor ws) {
+                        /**
+                         * @Description //TODO 集合是key:value数据类型，可以代表json结构
+                         */
+//                        HashMap<String, Object> json = new HashMap<>();
+//                        json.put("id",ws.getId());
+//                        json.put("ts", ws.getTs());
+//                        json.put("vc", ws.getVc());
+//                        return Requests.indexRequest()
+//                                .index("flink-0426")
+//                                .type("_doc")
+//                                .source(json);
+
                         String wsjson = JSON.toJSONString(ws);
                         return Requests.indexRequest()
                                 .index("flink-0426")
