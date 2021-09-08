@@ -13,6 +13,7 @@ import org.apache.flink.streaming.connectors.elasticsearch.RequestIndexer;
 import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.Requests;
 import org.elasticsearch.common.xcontent.XContentType;
 
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ public class Flink03_Sink_ES {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataStreamSource<String> streamSource = env.socketTextStream("localhost", 9999);
+        DataStreamSource<String> streamSource = env.socketTextStream("hadoop102", 9999);
 
         SingleOutputStreamOperator<WaterSensor> map = streamSource.map(new MapFunction<String, WaterSensor>() {
             @Override
             public WaterSensor map(String value) throws Exception {
-                String[] split = value.split(",");
+                String[] split = value.split(" ");
                 WaterSensor waterSensor = new WaterSensor(split[0], Long.parseLong(split[1]), Integer.parseInt(split[2]));
 
                 return waterSensor;
@@ -45,21 +46,24 @@ public class Flink03_Sink_ES {
         httphosts.add(httpHost2);
         httphosts.add(httpHost3);
 
-        ElasticsearchSink.Builder<WaterSensor> sensorBuilder = new ElasticsearchSink.Builder<>(httphosts, new ElasticsearchSinkFunction<WaterSensor>() {
+        ElasticsearchSink.Builder<WaterSensor> sensorBuilder = new ElasticsearchSink.Builder<>(
+                httphosts,
+                new ElasticsearchSinkFunction<WaterSensor>() {
+                    public IndexRequest createIndexRequest(WaterSensor ws) {
+                        String wsjson = JSON.toJSONString(ws);
+                        return Requests.indexRequest()
+                                .index("flink-0426")
+                                .type("_doc")
+                                .source(wsjson,XContentType.JSON);
+                    }
 
+                    @Override
+                    public void process(WaterSensor element, RuntimeContext ctx, RequestIndexer indexer) {
+                        indexer.add(createIndexRequest(element));
+                    }
+                });
 
-            @Override
-            public void process(WaterSensor element, RuntimeContext ctx, RequestIndexer indexer) {
-                //指定索引名，类型，docId
-                IndexRequest indexRequest = new IndexRequest("flink-0426", "_doc", "1001");
-                String jsonString = JSON.toJSONString(element);
-                //指定要写入的数据
-                IndexRequest request = indexRequest.source(jsonString, XContentType.JSON);
-
-                indexer.add(request);
-            }
-        });
-
+        //如果是无界流, 需要配置bulk的缓存
         sensorBuilder.setBulkFlushMaxActions(1);
         map.addSink(sensorBuilder.build());
 
