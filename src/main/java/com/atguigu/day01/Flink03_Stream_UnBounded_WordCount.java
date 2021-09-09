@@ -56,6 +56,5 @@ public class Flink03_Stream_UnBounded_WordCount {
         result.print();
 
         env.execute();
-
     }
 }

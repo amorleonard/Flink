@@ -34,18 +34,18 @@ public class Flink04_TransForm_KeyBy {
         }).setParallelism(4);
 
         //方式一：通过new KeySelector实现keyby
-//        KeyedStream<WaterSensor, String> keyby = flatMap.keyBy(new KeySelector<WaterSensor, String>() {
-//            @Override
-//            public String getKey(WaterSensor value) throws Exception {
-//                return value.getId();
-//            }
-//        });
+        KeyedStream<WaterSensor, String> keyby = flatMap.keyBy(new KeySelector<WaterSensor, String>() {
+            @Override
+            public String getKey(WaterSensor value) throws Exception {
+                return value.getId();
+            }
+        });
 
         //方式二：通过属性名来实现keyby
-        KeyedStream<WaterSensor, Tuple> keyBy = flatMap.keyBy("id");
-
-        flatMap.print("原始数据：").setParallelism(2);
-        keyBy.print("经过keyby之后：").setParallelism(2);
+//        KeyedStream<WaterSensor, Tuple> keyBy = flatMap.keyBy("id");
+//
+//        flatMap.print("原始数据：").setParallelism(2);
+//        keyBy.print("经过keyby之后：").setParallelism(2);
 
         //方式三：通过下标实现keyby,只适用于tuple元组
 
