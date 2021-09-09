@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
  * @ClassName Flink01_TransForm_Map_RichMapFunction
- * @Description //TODO
+ * @Description //TODO 富函数使用
  * @Author Amor_leonard
  * @Date 2021/9/7 18:19
  * @Version 1.0
@@ -28,7 +28,7 @@ public class Flink01_TransForm_Map_RichMapFunction {
         env.execute();
     }
 
-    //
+    //自定义类继承RichMapFunction
     public static class myMap extends RichMapFunction<String, String> {
         //默认生命周期方法，最先被调用，每个并行实例执行一次,如建立连接...
         @Override

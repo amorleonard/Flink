@@ -1,4 +1,4 @@
-package com.atguigu.day02;
+package com.atguigu.day02.source;
 
 
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -11,7 +11,7 @@ import java.util.Properties;
 
 /**
  * @ClassName Flink03_Source_Kafka
- * @Description //TODO 从kafka中读取数据
+ * @Description //TODO 从kafka中读取数据，即充当kafka消费者
  * @Author Amor_leonard
  * @Date 2021/9/6 15:23
  * @Version 1.0

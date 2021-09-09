@@ -53,21 +53,22 @@ public class Flink03_Sink_ES {
                     public IndexRequest createIndexRequest(WaterSensor ws) {
                         /**
                          * @Description //TODO 集合是key:value数据类型，可以代表json结构
+                         * (实验证明这样写也是对的，但是字段顺序会与tojsonString保存的顺序有所不同)
                          */
-//                        HashMap<String, Object> json = new HashMap<>();
-//                        json.put("id",ws.getId());
-//                        json.put("ts", ws.getTs());
-//                        json.put("vc", ws.getVc());
-//                        return Requests.indexRequest()
-//                                .index("flink-0426")
-//                                .type("_doc")
-//                                .source(json);
-
-                        String wsjson = JSON.toJSONString(ws);
+                        HashMap<String, Object> json = new HashMap<>();
+                        json.put("id",ws.getId());
+                        json.put("ts", ws.getTs());
+                        json.put("vc", ws.getVc());
                         return Requests.indexRequest()
                                 .index("flink-0426")
                                 .type("_doc")
-                                .source(wsjson,XContentType.JSON);
+                                .source(json);
+
+//                        String wsjson = JSON.toJSONString(ws);
+//                        return Requests.indexRequest()
+//                                .index("flink-0426")
+//                                .type("_doc")
+//                                .source(wsjson,XContentType.JSON);
                     }
 
                     @Override
@@ -76,8 +77,9 @@ public class Flink03_Sink_ES {
                     }
                 });
 
-        //如果是无界流, 需要配置bulk的缓存
+        //如果是无界流, 需要配置bulk的缓存,通过阈值控制什么时候写入数据，以下设置为来一条，写一条
         sensorBuilder.setBulkFlushMaxActions(1);
+
         map.addSink(sensorBuilder.build());
 
 

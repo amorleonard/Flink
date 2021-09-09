@@ -1,4 +1,4 @@
-package com.atguigu.day02;
+package com.atguigu.day02.source;
 
 import com.atguigu.bean.WaterSensor;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -10,7 +10,7 @@ import java.util.Random;
 
 /**
  * @ClassName Flink04_Source_Custom
- * @Description //TODO 自定义source
+ * @Description //TODO 自定义source,自定义数据源
  * @Author Amor_leonard
  * @Date 2021/9/6 17:56
  * @Version 1.0
