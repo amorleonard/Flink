@@ -22,6 +22,7 @@ public class Flink04_Source_Custom {
 
         env.setParallelism(1);
 
+
         DataStreamSource<WaterSensor> waterSensorDataStreamSource = env.addSource(new SourceFunction<WaterSensor>() {
             private boolean isRuning = true;
             private volatile Random random = new Random();
