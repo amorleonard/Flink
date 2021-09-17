@@ -41,11 +41,12 @@ public class Flink07_Project_Login {
                 // 按照用户id分组
                 .keyBy(LoginEvent::getUserId)
                 .process(new KeyedProcessFunction<Long, LoginEvent, String>() {
-
+                    //定义状态
                     private ListState<Long> failTss;
 
                     @Override
                     public void open(Configuration parameters) throws Exception {
+                        //初始化状态
                         failTss = getRuntimeContext().getListState(new ListStateDescriptor<Long>("failTss", Long.class));
                     }
 

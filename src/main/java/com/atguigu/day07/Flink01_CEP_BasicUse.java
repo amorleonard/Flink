@@ -25,6 +25,7 @@ public class Flink01_CEP_BasicUse {
 
         DataStreamSource<String> streamSource = env.readTextFile("E:\\BigData0426\\Flink\\input\\Sensor.txt");
 
+        //封装JavaBean
         SingleOutputStreamOperator<WaterSensor> mapStream = streamSource.map(new MapFunction<String, WaterSensor>() {
             @Override
             public WaterSensor map(String value) throws Exception {
@@ -33,6 +34,7 @@ public class Flink01_CEP_BasicUse {
             }
         });
 
+        //分配watermark
         SingleOutputStreamOperator<WaterSensor> waterSensorSingleOutputStreamOperator = mapStream.assignTimestampsAndWatermarks(
                 WatermarkStrategy
                         .<WaterSensor>forBoundedOutOfOrderness(Duration.ofSeconds(2))

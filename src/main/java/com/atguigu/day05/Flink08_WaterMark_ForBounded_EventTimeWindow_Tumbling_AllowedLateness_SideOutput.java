@@ -58,7 +58,7 @@ public class Flink08_WaterMark_ForBounded_EventTimeWindow_Tumbling_AllowedLatene
 
         //6.开启一个基于事件时间的滚动窗口
         WindowedStream<WaterSensor, Tuple, TimeWindow> window = keyedStream.window(TumblingEventTimeWindows.of(Time.seconds(5)))
-                //运行迟到的数据
+                //允许迟到的数据
                 .allowedLateness(Time.seconds(2))
                 //将迟到的数据输出到侧输出流
                 .sideOutputLateData(new OutputTag<WaterSensor>("out-put"){})
